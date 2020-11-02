@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Tags from './Tags';
 
 import styled from 'styled-components/macro';
 
@@ -9,7 +10,15 @@ export default function RegisterForm() {
     email: '',
     gender: 'female',
     toc: false,
+    tags: [],
   });
+
+  function updateTags(tag) {
+    setUserProfile({
+      ...userProfile,
+      tags: [...userProfile.tags, tag],
+    });
+  }
 
   function sendForm(event) {
     event.preventDefault();
@@ -18,7 +27,6 @@ export default function RegisterForm() {
     } else {
       alert('ERROR: Check your input');
     }
-
     console.log(userProfile);
   }
 
@@ -106,6 +114,12 @@ export default function RegisterForm() {
           Diverse
         </label>
       </Fieldset>
+
+      <Tags
+        onUpdateTags={updateTags}
+        tags={userProfile.tags}
+        headline="Your interests"
+      />
 
       <label>
         <input type="checkbox" name="toc" onChange={handleChange} />
