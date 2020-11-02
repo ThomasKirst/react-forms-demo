@@ -13,6 +13,12 @@ export default function RegisterForm() {
 
   function sendForm(event) {
     event.preventDefault();
+    if (validateForm(userProfile)) {
+      alert('Success');
+    } else {
+      alert('ERROR: Check your input');
+    }
+
     console.log(userProfile);
   }
 
@@ -59,7 +65,7 @@ export default function RegisterForm() {
         <label>
           <strong>Email</strong>
           <input
-            type="email"
+            type="text"
             name="email"
             onChange={handleChange}
             value={userProfile.email}
@@ -115,6 +121,24 @@ export default function RegisterForm() {
     </FormWrapper>
   );
 }
+
+const validateName = ({ firstName, lastName }) =>
+  firstName.length >= 2 && lastName.length >= 2;
+
+const hasValidDomain = (email) => {
+  const parts = email.split('.');
+  return parts.length >= 2 && parts[parts.length - 1].length >= 2;
+};
+
+const validateEmail = ({ email }) =>
+  email.includes('@') && hasValidDomain(email);
+
+const tocAccepted = ({ toc }) => toc;
+
+const validateForm = (userProfile) =>
+  validateName(userProfile) &&
+  validateEmail(userProfile) &&
+  tocAccepted(userProfile);
 
 const FormWrapper = styled.form`
   display: grid;
