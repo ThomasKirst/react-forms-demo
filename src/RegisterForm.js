@@ -12,7 +12,6 @@ export default function RegisterForm() {
   });
 
   function sendForm(event) {
-    debugger;
     event.preventDefault();
     console.log(userProfile);
   }
