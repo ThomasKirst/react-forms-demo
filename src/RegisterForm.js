@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Tags from './Tags';
 
 import styled from 'styled-components/macro';
 
@@ -9,7 +10,16 @@ export default function RegisterForm() {
     email: '',
     gender: 'female',
     toc: false,
+    tags: [],
   });
+  const [formIsValid, setFormIsValid] = useState(false);
+
+  function updateTags(tag) {
+    setUserProfile({
+      ...userProfile,
+      tags: [...userProfile.tags, tag],
+    });
+  }
 
   function sendForm(event) {
     event.preventDefault();
@@ -18,19 +28,20 @@ export default function RegisterForm() {
     } else {
       alert('ERROR: Check your input');
     }
-
     console.log(userProfile);
   }
 
   function handleChange(event) {
     const fieldValue =
       event.target.name === 'toc' ? event.target.checked : event.target.value;
-    console.log(fieldValue);
+
     setUserProfile({
       ...userProfile,
       [event.target.name]: fieldValue,
     });
   }
+
+  useEffect(() => setFormIsValid(validateForm(userProfile)), [userProfile]);
 
   return (
     <FormWrapper onSubmit={sendForm}>
@@ -107,6 +118,12 @@ export default function RegisterForm() {
         </label>
       </Fieldset>
 
+      <Tags
+        onUpdateTags={updateTags}
+        tags={userProfile.tags}
+        headline="Your interests"
+      />
+
       <label>
         <input type="checkbox" name="toc" onChange={handleChange} />
         <small>
@@ -116,7 +133,7 @@ export default function RegisterForm() {
       </label>
 
       <div>
-        <Button>Register</Button>
+        <Button disabled={!formIsValid}>Register</Button>
       </div>
     </FormWrapper>
   );
@@ -185,8 +202,12 @@ const Fieldset = styled.fieldset`
 const Button = styled.button`
   border: none;
   border-radius: 5px;
-  background: deeppink;
+  background-color: deeppink;
   color: ivory;
   font-size: 1.25rem;
   padding: 1rem 2rem;
+  transition: background-color ease-in-out 1s;
+  &[disabled] {
+    background-color: #ccc;
+  }
 `;
