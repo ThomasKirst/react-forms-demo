@@ -24,11 +24,19 @@ export default function RegisterForm() {
   function sendForm(event) {
     event.preventDefault();
     if (validateForm(userProfile)) {
-      alert('Success');
+      fetch('http://localhost:4000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userProfile),
+      })
+        .then((data) => data.json())
+        .then((createdUser) => console.log(createdUser, 'CREATED'))
+        .catch((error) => console.error(error));
     } else {
       alert('ERROR: Check your input');
     }
-    console.log(userProfile);
   }
 
   function handleChange(event) {
